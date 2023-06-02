@@ -1,49 +1,22 @@
 class ParkingSystem {
 public:
-    int b, m, s;
-    ParkingSystem(int big, int medium, int small)
-    {
-        b = big;
-        m = medium;
-        s = small;
+    std::vector<int> slots;
+
+    ParkingSystem(int big, int medium, int small) {
+        slots.resize(3); // Resize the vector to have 3 elements
+        slots[0] = big;
+        slots[1] = medium;
+        slots[2] = small;
     }
 
-    bool addCar(int carType)
-    {
-        if (carType == 1)
-        {
-            if (b >= 1)
-            {
-                b--;
-                return true;
-            }
-            else
-                return false;
+    bool addCar(int carType) {
+        if (carType >= 1 && carType <= 3 && slots[carType - 1] > 0) {
+            slots[carType - 1]--;
+            return true;
         }
-        if (carType == 2)
-        {
-            if (m >= 1)
-            {
-                m--;
-                return true;
-            }
-            else
-                return false;
-        }
-        if (carType == 3)
-        {
-            if (s >= 1)
-            {
-                s--;
-                return true;
-            }
-            else
-                return false;
-        }
-        return false;  
+        return false;
     }
 };
-
 /**
  * Your ParkingSystem object will be instantiated and called as such:
  * ParkingSystem* obj = new ParkingSystem(big, medium, small);
