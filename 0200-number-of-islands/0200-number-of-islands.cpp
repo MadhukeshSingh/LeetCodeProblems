@@ -1,35 +1,27 @@
 class Solution {
+private:
+    void clearRestOfLand(vector<vector<char>>& grid, int i, int j) {
+        if (i < 0 || j < 0 || i >= grid.size() || j >= grid[i].size() || grid[i][j] == '0') return;
+        
+        grid[i][j] = '0';
+        clearRestOfLand(grid, i+1, j);
+        clearRestOfLand(grid, i-1, j);
+        clearRestOfLand(grid, i, j+1);
+        clearRestOfLand(grid, i, j-1);
+        return;
+    }
 public:
     int numIslands(vector<vector<char>>& grid) {
-        int ans=0,r=grid.size(),c=grid[0].size();
-        int dir_r[]={1,-1,0,0};  
-        int dir_c[]={0,0,1,-1}; 
-        vector<vector<bool>> vis(r,vector(c,false));
-
-        for(int i=0;i<r;i++){
-            for(int j=0;j<c;j++){
-                if(grid[i][j]=='0' || vis[i][j])  
-                    continue;
-                queue<pair<int,int>> q;
-                q.push({i,j});
-                ans++;
-                vis[i][j]=true;
-                while(!q.empty()){
-                    auto pre=q.front();
-                    q.pop();
-                    for(int d=0;d<4;d++){
-                        int qr= pre.first + dir_r[d];
-                        int qc= pre.second + dir_c[d];
-                        if(qr<0 || qr >= r || qc<0 || qc>= c)
-                            continue;
-                        if(grid[qr][qc]=='0') continue;  
-                        if(vis[qr][qc]) continue;  
-                        q.push({qr,qc});
-                        vis[qr][qc]=true;
-                    }                    
+        int count = 0;
+        
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[i].size(); j++) {
+                if (grid[i][j] == '1') {
+                    count++;
+                    clearRestOfLand(grid, i, j);
                 }
             }
-        } 
-        return ans;        
+        }
+        return count;   
     }
 };
