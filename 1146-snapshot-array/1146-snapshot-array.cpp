@@ -1,35 +1,30 @@
 class SnapshotArray {
 public:
-     vector<map<int,int>>A;
-    // snap_id
-    int s_id = 0;
+      vector<vector<pair<int, int>>>updates;
+    int curSnap;
 
+public:
     SnapshotArray(int length) {
-      
-        A.resize(length);
-
-        for(int i = 0; i < length; i++)
-            A[i][0] = 0;
-        
+        updates.resize(length);
+        curSnap = 0;
     }
-    
+
     void set(int index, int val) {
+        if (!updates[index].empty() && updates[index].back().first == curSnap)
+            updates[index].back().second = val;
+        else
+            updates[index].push_back({curSnap, val});
+    }
 
-        A[index][s_id] = val;
-    }
-    
     int snap() {
-        s_id++;
-        return  s_id - 1;
+        curSnap++;
+        return curSnap - 1;
     }
-    
+
     int get(int index, int snap_id) {
-        if(A[index].find(snap_id) == A[index].end())
-        {
-            auto it = --A[index].lower_bound(snap_id);
-            return it->second;
-        }
-        return A[index][snap_id];
+        int idx = upper_bound(updates[index].begin(), updates[index].end(), make_pair(snap_id,INT_MAX)) - updates[index].begin();
+        if (idx == 0) return 0;
+        return updates[index][idx - 1].second;
     }
 };
 
