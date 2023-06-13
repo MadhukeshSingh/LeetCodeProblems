@@ -1,24 +1,35 @@
 class Solution {
 public:
     bool search(vector<int>& nums, int target) {
-          int s=0;
-        int e=nums.size()-1;
-        int mid=s+ (e-s)/2;
-        while(s<=e){
-             if( nums[s]==target || nums[mid]==target||nums[e]==target){
+        int low = 0;
+        int high = nums.size()-1;
+        while(low<=high){
+            int mid = low + (high-low)/2;
+            if (nums[mid] == target){
                 return true;
-                
-            }   
-           
-           else if(nums[mid]<target ){
-                e--;
-            } 
-            else if( nums[mid]>target  ){
-                s++;e--;
             }
-                        
-             mid=(s+e)/2;
-        } 
-    return false;
+            if(nums[low] == nums[mid] && nums[mid] == nums[high]){
+                high--;
+                low++;
+                continue;
+            }
+            if(nums[low]<=nums[mid]){
+                if(nums[low]<=target  &&  nums[mid]>=target){
+                    high = mid -1;
+                }
+                else{
+                    low = mid+1;
+                }
+            }
+            else{
+                if(nums[mid]<=target  &&  nums[high]>=target){
+                    low = mid + 1;
+                }
+                else{
+                    high = mid - 1;
+                }
+            }
+        }
+        return false;
     }
 };
