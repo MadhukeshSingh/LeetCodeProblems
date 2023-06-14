@@ -10,26 +10,27 @@
  * };
  */
 class Solution {
+    
 public:
+    vector<int>v;
+  void inorder(TreeNode* root){
+
+      if(root == NULL)
+       return ;
+
+      inorder(root->left);
+      v.push_back(root->val);
+      inorder(root->right); 
+
+  }
     int getMinimumDifference(TreeNode* root) {
-        TreeNode* curr = root;
-        TreeNode* prev = NULL;
-        int ans = INT_MAX;
-        stack<TreeNode*> st;
-        while(curr != NULL || !st.empty()){
-            if (curr != NULL){
-                st.push(curr);
-                curr = curr -> left;
-            }
-            else{
-                curr = st.top();
-                st.pop();
-                if (prev != NULL)
-                    ans = min(ans, curr->val - prev -> val);
-            prev = curr;
-            curr = curr -> right;
-            }
-        }
+        
+         inorder(root);
+
+        int ans=INT_MAX;
+       for(int i=1;i<v.size();i++) 
+        ans= min(ans,v[i]-v[i-1]);
+
         return ans;
     }
 };
