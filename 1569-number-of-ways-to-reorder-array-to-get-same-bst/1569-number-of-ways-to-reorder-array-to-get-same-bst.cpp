@@ -1,32 +1,34 @@
 class Solution {
-        vector<vector<long long>>ncr;
-        long long mod=1e9+7;
-public:
+        vector<vector<long long>> dp;
+    long long MOD = 1e9 + 7;
 
-        long long ways(vector<int>&v,int n){
-            if(n<=2)return 1;
-            vector<int>left,right;
-            for(int i=1;i<n;i++){
-                if(v[0]>v[i])left.push_back(v[i]);
-                else right.push_back(v[i]);
-            }
-            long long ans_left=ways(left,left.size());
-            long long ans_right=ways(right,right.size());
-
-            long long ans = (((ncr[n-1][left.size()]*ans_left)%mod)*ans_right)%mod;
-            return ans;
+    unsigned long long solve(vector<int> &nums) {
+        if (nums.size() <= 1) return 1;
+        vector<int> l, r;
+        for (int i = 1; i < nums.size(); ++i) {
+            if (nums[i] > nums[0]) r.push_back(nums[i]);
+            else l.push_back(nums[i]);
         }
-        int numOfWays(vector<int>& v) {
-            int n=v.size();
-            ncr.resize(n + 1);
-             for(int i = 0; i < n + 1; ++i){
-            ncr[i] = vector<long long>(i + 1, 1);
-            for(int j = 1; j < i; ++j){
-                ncr[i][j] = (ncr[i-1][j-1] + ncr[i-1][j]) % mod;
-                }
-                }
+        int n = l.size(), m = r.size();
+        return solve(l) * solve(r) % MOD * dp[n + m][n] % MOD;
+    }
 
-            return (ways(v,n)-1)%mod;
+public:
+    int numOfWays(vector<int> &nums) {
+        dp = vector<vector<long long>>(nums.size() + 1, vector<long long>(nums.size() + 1, 0));
+        for (int i = 1; i < nums.size() + 1; ++i) {
+            dp[i][0] = 1;
+            dp[i][1] = i;
+            dp[i][i - 1] = i;
+            dp[i][i] = 1;
+        }
+        for (int i = 2; i < nums.size() + 1; ++i) {
+            for (int j = 2; j < nums.size() + 1; ++j) {
+                if (i >= j) dp[i][j] = (dp[i - 1][j - 1] % MOD + dp[i - 1][j] % MOD) % MOD;
+                else break;
+            }
+        }
+        return solve(nums) - 1;
    
     }
 };
