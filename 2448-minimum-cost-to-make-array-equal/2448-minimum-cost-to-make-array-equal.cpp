@@ -1,42 +1,27 @@
 class Solution {
 public:
-    long long calc(vector<int>&nums, vector<int>& cost, long long median){
-
-        long long ans = 0;
-
-         for(int i=0;i<nums.size();i++)
-           ans += abs(1ll*nums[i]-median)*(1ll*cost[i]);
-
-         return ans;  
-    }
-
     long long minCost(vector<int>& nums, vector<int>& cost) {
-
-        long long tot = 0;
-        long long sum = 0;
-        int n = nums.size();
-
-        vector<pair<int,int>> vec;
-
-        for(int i=0;i<nums.size();i++)
-            vec.push_back({nums[i],cost[i]});
-
-        sort(vec.begin(),vec.end());
-
-        for(int i=0;i<n;i++)
-        sum += vec[i].second;
-
-        long long median;
-        int i=0;
-
-        while(tot < (sum+1)/2 && i<n){
-
-             tot += 1ll*vec[i].second;
-             median = vec[i].first;
-             i++;
-        }    
-        
-        
-        return calc(nums,cost,median);
+        vector<pair<long long,long long>>vp;
+         long long weight = 0;
+        for(int i=0;i<nums.size();i++){
+            vp.push_back({nums[i],cost[i]});
+            weight += cost[i];
+        }
+        long long index = (weight)/2;
+        sort(vp.begin(),vp.end());
+        long long v1=-1,v2=-1;
+        long long add=0;
+        for(int i=0;i<nums.size();i++){
+            add += vp[i].second;
+            if(add>=index && v1==-1)v1=vp[i].first;
+            if(add>=(index+1) && v2==-1)v2=vp[i].first;
+        }
+        cout<<index;
+        long long s1=0,s2=0;
+        for(int i=0;i<nums.size();i++){
+            s1 += 1LL*abs(v1-vp[i].first)*vp[i].second;
+            s2 += 1LL*abs(v2-vp[i].first)*vp[i].second;
+        }
+        return min(s1,s2);
     }
 };
