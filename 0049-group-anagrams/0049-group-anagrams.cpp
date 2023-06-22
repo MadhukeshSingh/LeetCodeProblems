@@ -2,17 +2,23 @@ class Solution {
 public:
     vector<vector<string>>  groupAnagrams (vector<string>&strs) {
 
-unordered_map<string, vector <string>> hashTable; for (const string& str: strs)
+ vector<vector<string>>ans;
+        
+       unordered_map<string, vector<string>>mp;
+        
+        
+        for(int i = 0 ; i < strs.size() ; i++)
+        {
+            string s = strs[i];
+            sort(strs[i].begin(),strs[i].end());
+            mp[strs[i]].push_back(s);
+        }
+                
+        for(auto i : mp)
+        {
+            ans.push_back(i.second);
+        }
 
-{ 
-string sortedStr = str; sort(sortedStr.begin(), sortedStr.end()); 
-   hashTable[sortedStr].push_back(str);
-
-} 
-    
-        vector<vector<string>> result; for (auto& it: hashTable) { result.push_back(it.second );
-
-} 
-        return result;
+        return ans;
     }
 };
