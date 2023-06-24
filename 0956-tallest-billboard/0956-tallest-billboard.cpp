@@ -1,34 +1,26 @@
 class Solution {
 public:
-    int dp[20][10001];
-    int solve(int idx, int dif, vector<int> &rods)
-    {
-        if(idx == rods.size())
-        {
-            if(dif == 0)
-            {
-                return 0;
-            }
-
-            return -1e5;
-        }
-
-        if(dp[idx][dif + 5000] != -1)
-        {
-            return dp[idx][dif + 5000];
-        }
-
-        int ans1 = solve(idx+1, dif, rods);  
-
-        int ans2 = rods[idx] + solve(idx+1, dif + rods[idx], rods); 
-        int ans3 = rods[idx] + solve(idx+1, dif - rods[idx], rods);  
-
-        return dp[idx][dif + 5000] = max(ans1, max(ans2, ans3));
-    }
     int tallestBillboard(vector<int>& rods) {
-        memset(dp, -1, sizeof(dp));
-        int ans = solve(0,0,rods)/2; 
-        return ans;
-        
+          int sum = 0;
+        for (int rod : rods) {
+            sum += rod;
+        }
+        int dp[sum + 1];
+        dp[0] = 0;
+        for (int i = 1; i <= sum; i++) {
+            dp[i] = -1;
+        }
+        for (int rod : rods) {
+            int dpCopy[sum + 1];
+            copy(dp, dp + (sum + 1), dpCopy);
+
+            for (int i = 0; i <= sum - rod; i++) {
+                if (dpCopy[i] < 0) continue;
+
+                dp[i + rod] = max(dp[i + rod], dpCopy[i]);
+                dp[abs(i - rod)] = max(dp[abs(i - rod)], dpCopy[i] + min(i, rod));
+            }
+        }
+        return dp[0];
     }
 };
