@@ -1,41 +1,30 @@
 class Solution {
+private:
+     bool check(string &s, int i, int j){
+        while(i<j){
+            if(s[i] != s[j]){
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }            
 public:
     string longestPalindrome(string s) {
-         int n =s.length();
-       int dp[1000][1000]={0};
-      for(int i=0;i<n;i++){
-        dp[i][i]=1;
-      }
-      for(int i=0;i<n-1;i++){
-          if(s[i]==s[i+1]){
-            dp[i][i+1]=1;
-          }  
-      }
-       for(int k=3;k<=n;k++){
-         for (int i = 0; i < n - k + 1; ++i) {
-           
-            int j = i + k - 1;
- 
-             if (dp[i + 1][j - 1]==1 && s[i] == s[j]) {
-                dp[i][j] = 1;
-             }
-
-         }
-       }
-        int ans=0;
-         string str;
-        for(int i=0;i<n;i++){
-          for(int j=0;j<n;j++){
-            //   cout<<dp[i][j]<<" ";
-               if(dp[i][j]==1){
-                    int length =j-i+1;
-                    if(length>ans){
-                     ans=length;
-                    str = s.substr(i,j-i+1);
-               }
-           }
-          }
+        int n = s.size();
+        int starting_index = 0;
+        int max_len = 0;
+        for(int i=0; i<n; i++){
+            for(int j=i; j<n; j++){
+                if(check(s, i, j)){
+                    if(j-i+1 > max_len){
+                        max_len = j-i+1;
+                        starting_index = i;
+                    }
+                }
+            }
         }
-     return str;
+        return s.substr(starting_index, max_len);
     }
 };
