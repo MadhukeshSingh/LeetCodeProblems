@@ -1,7 +1,6 @@
 class Solution {
              int mod=1e9+7;
 public:
-
     int numberOfGoodSubarraySplits(vector<int>& nums) {
         int n=nums.size();
         int v[n], p = 0;
