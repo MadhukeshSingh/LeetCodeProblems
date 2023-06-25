@@ -1,33 +1,37 @@
 class MinStack {
 public:
-    int MinStackHu[1000000];
-    int t = -1;
-
-    MinStack() {}
-
+     stack<pair<int,int>> st;
+    MinStack() {
+        
+    }
+    
     void push(int val) {
-        t++;
-        MinStackHu[t] = val;
+        if(st.empty()){
+            int mn = val;
+            st.push({val,val});
+        }
+        else{
+            int mn = min(st.top().second,val);
+            st.push({val,mn});
+        }
+        
     }
-
+    
     void pop() {
-        if (t == -1) {
-            return;
-        } else {
-            t--;
+        if(!st.empty()){
+            st.pop();
         }
     }
-
+    
     int top() {
-        return MinStackHu[t];
-    }
-
-    int getMin() {
-        int mini = INT_MAX;
-        for (int i = 0; i <= t; i++) {
-            mini = std::min(mini, MinStackHu[i]);
+        if(st.empty()){
+            return 0;
         }
-        return mini;
+        return st.top().first;
+    }
+    
+    int getMin() {
+        return st.top().second;
     }
 };
 
