@@ -1,30 +1,35 @@
 class Solution {
 public:
+         int mod=1e9+7;
+    
+    int helper(vector<vector<int>>&dp,vector<int>&locations,int current,int &finish,int fuel, int n){
+
+        if(fuel<0)
+        return 0;
+
+        if(dp[current][fuel]!=-1)
+         return dp[current][fuel];
+
+        int ans=0;
+
+        if(current==finish)
+        ans++;
+
+        for(int next=0;next<n;next++)
+            if(next!=current)
+                ans=(ans%mod+helper(dp,locations,next,finish,fuel-abs(locations[current]-locations[next]),n)%mod)%mod;
+         
+
+        return dp[current][fuel]=ans%mod;
+    }
+
+
     int countRoutes(vector<int>& locations, int start, int finish, int fuel) {
-         int n = locations.size();
-         int mod = 1e9 + 7;
-         vector<vector<int>>dp(n,vector<int>(fuel+1));
 
-         dp[start][fuel]=1;
+        int n=locations.size();
 
+        vector<vector<int>>dp(n,vector<int>(fuel+1,-1));
 
-         for(int f = fuel;f>=0;f--){
-            for(int i=0;i<n;i++){
-                for(int j=0;j<n;j++){
-
-                    int diff = abs(locations[i] - locations[j]);
-
-                    if(i != j && f >= diff)
-                    dp[j][f-diff] = (dp[j][f-diff]%mod + dp[i][f]%mod)%mod;
-                }
-            }
-         }
-
-         int ans = 0;
-
-         for(int i=0;i<=fuel;i++)
-          ans = (ans%mod + dp[finish][i]%mod)%mod;
-
-        return ans;   
+        return helper(dp,locations,start,finish,fuel,n);
     }
 };
