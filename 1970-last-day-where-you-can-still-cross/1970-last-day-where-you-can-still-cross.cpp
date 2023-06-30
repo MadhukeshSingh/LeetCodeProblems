@@ -1,46 +1,50 @@
 class Solution {
 public:
-          int n,m;
-    int d[5] = {0,1,0,-1,0};
-    bool dfs(vector<vector<int>>&vis,vector<vector<int>>&v,int i,int j){
-        vis[i][j]=1;
-        if(i==n-1)return true;
-        bool ans = false;
-        for(int k=0;k<4;k++){
-            int ni = i + d[k];
-            int nj = j + d[k+1];
-            if(ni>=0 && nj>=0 && ni<n && nj<m && !vis[ni][nj] && !v[ni][nj]){
-                ans |= dfs(vis,v,ni,nj);
+    bool isPossible(int m, int n, int t, vector<vector<int>>& cells) {
+        vector<vector<int>> grid(m + 1, vector<int>(n + 1, 0)); 
+        vector<pair<int, int>> directions {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; 
+
+        for (int i = 0; i < t; i++) {
+            grid[cells[i][0]][cells[i][1]] = 1; 
+        }
+
+        queue<pair<int, int>> q;
+        
+        for (int i = 1; i <= n; i++) {
+            if (grid[1][i] == 0) {
+                q.push({1, i}); 
+                grid[1][i] = 1; 
             }
         }
-        return ans;
+        while (!q.empty()) {
+            pair<int, int> p = q.front();
+            q.pop();
+            int r = p.first, c = p.second; 
+            for (auto d : directions) {
+                int nr = r + d.first, nc = c + d.second; 
+                if (nr > 0 && nc > 0 && nr <= m && nc <= n && grid[nr][nc] == 0) {
+                    grid[nr][nc] = 1; 
+                    if (nr == m) {
+                        return true; 
+                    }
+                    q.push({nr, nc}); 
+                }
+            }
+        }
+        return false;
     }
-    int latestDayToCross(int row, int col, vector<vector<int>>& cell) {
-        int l=0,r=cell.size()-1;
-        n = row;
-        m = col;
-        int day=0;
-        while(l<=r){
-            int mid = (l+r)/2;
-            vector<vector<int>>v(row,vector<int>(col,0));
-            for(int i=0;i<=mid;i++){
-                v[cell[i][0]-1][cell[i][1]-1]=1;
+
+    int latestDayToCross(int row, int col, vector<vector<int>>& cells) {
+        int left = 0, right = row * col, latestPossibleDay = 0;
+        while (left < right - 1) {
+            int mid = left + (right - left) / 2;
+            if (isPossible(row, col, mid, cells)) {
+                left = mid; 
+                latestPossibleDay = mid; 
+            } else {
+                right = mid; 
             }
-           vector<vector<int>>vis(row,vector<int>(col,0));
-           bool ans=false;
-           for(int i=0;i<col;i++){
-               if(vis[0][i]==0 && v[0][i]==0){
-                   ans |= dfs(vis,v,0,i);
-               }
-           }
-           if(ans){
-               day=mid;
-               l=mid+1;
-           }
-           else{
-               r = mid - 1;
-           }
         }
-        return day+1;
+        return latestPossibleDay;
     }
 };
