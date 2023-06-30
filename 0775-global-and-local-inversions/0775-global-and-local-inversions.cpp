@@ -3,7 +3,7 @@ public:
     bool isIdealPermutation(vector<int>& nums) {
         int n = nums.size();
         vector<int> temp(n);
-        long long global = 0, local = 0; // Change the integer type to long long
+        long long global = 0, local = 0; 
         for (int i = 0; i < n - 1; i++) {
             if (nums[i] > nums[i + 1])
                 local++;
@@ -12,9 +12,9 @@ public:
         return local == global;
     }
 
-    long long mergesort(vector<int>& arr, vector<int>& temp, int l, int r) { // Change the return type to long long
+    long long mergesort(vector<int>& arr, vector<int>& temp, int l, int r) { 
         int mid = 0;
-        long long inv = 0; // Change the integer type to long long
+        long long inv = 0;
         if (r > l) {
             mid = (l + r) / 2;
             inv += mergesort(arr, temp, l, mid);
@@ -24,9 +24,9 @@ public:
         return inv;
     }
 
-    long long merge(vector<int>& arr, vector<int>& temp, int l, int mid, int r) { // Change the return type to long long
+    long long merge(vector<int>& arr, vector<int>& temp, int l, int mid, int r) { 
         int i = l, j = mid, k = l;
-        long long inv = 0; // Change the integer type to long long
+        long long inv = 0; 
         while (i <= mid - 1 && j <= r) {
             if (arr[i] <= arr[j]) {
                 temp[k++] = arr[i++];
