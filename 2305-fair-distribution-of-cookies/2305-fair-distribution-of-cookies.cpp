@@ -1,26 +1,22 @@
 class Solution {
-    vector<int>v;
-    int ans;
 public:
-    void help(vector<int>&c,int k,int index){
-        if(index == c.size()){
-            int total = INT_MIN;
-            for(int i=0;i<k;i++){
-                total = max(total,v[i]);
-            }
-            ans = min(ans,total);
-            return;
+    int solve(vector<int>&v,int i,vector<int>&a){
+        if(i==v.size()){
+            int ans=0;
+            for(auto it : a)ans=max(ans,it);
+            return ans;
         }
-        for(int i=0;i<k;i++){
-            v[i] += c[index];
-            help(c,k,index+1);
-            v[i] -= c[index];
+        int mn=INT_MAX;
+        for(int j=0;j<a.size();j++){
+            a[j]+=v[i];
+            mn=min(mn,solve(v,i+1,a));
+            a[j]-=v[i];
         }
+        return mn;
     }
-    int distributeCookies(vector<int>& c, int k) {
-        ans = INT_MAX;
-        v.resize(k,0);
-        help(c,k,0);
-        return ans;
+    int distributeCookies(vector<int>&v, int k) {
+        int i,n=v.size();
+        vector<int>a(k);
+        return solve(v,0,a);
     }
 };
