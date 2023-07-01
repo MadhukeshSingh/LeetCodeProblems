@@ -32,7 +32,7 @@ public:
                 temp[k++] = arr[i++];
             } else {
                 temp[k++] = arr[j++];
-                inv += mid - i;
+                inv +=mid-i;
             }
         }
         while (i <= mid - 1)
