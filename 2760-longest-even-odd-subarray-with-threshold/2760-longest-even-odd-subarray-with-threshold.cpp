@@ -1,33 +1,17 @@
 
 class Solution {
 public:
-    int longestAlternatingSubarray(vector<int>& nums, int threshold) {
-        int ans = 0;
-        int i = 0;
-        int n = nums.size();
+bool OddEven(int a, int b) {
+    return (a & 1) + (b & 1) == 1;
+}
 
-        while (i < n) {
-            if (nums[i] % 2 != 0 || nums[i] > threshold) {
-                i++;
-                continue;
-            }
-
-            ans = max(ans, 1);
-            int j = i + 1;
-            while (j < n) {
-                if (nums[j] % 2 != nums[j - 1] % 2 && nums[j] <= threshold) {
-                    ans = max(ans, j - i + 1);
-                    j++;
-                } else {
-                    i = j;
-                    break;
-                }
-            }
-            if (j == n) {
-                break;
-            }
-        }
-
-        return ans;
+int longestAlternatingSubarray(vector<int>& A, int K) {
+    int cnt = 0, res = 0;
+    for(int i = 0;i < size(A); ++i) {
+        if(i > 0 && OddEven(A[i], A[i - 1]) && max(A[i], A[i - 1]) <= K) ++cnt; 
+        else cnt = A[i] % 2 == 0 && A[i] <= K;
+        res = max(res, cnt);
     }
+    return res;
+}
 };
