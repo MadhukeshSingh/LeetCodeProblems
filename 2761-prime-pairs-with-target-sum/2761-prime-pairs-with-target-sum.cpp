@@ -1,43 +1,34 @@
 class Solution {
 public:
-    void SieveOfEratosthenes(int n)
-{
-   
-  
-}
-    
-    
-    vector<vector<int>> findPrimePairs(int n) {
-           
-    int nn = 1e6+1;
-    bool prime[nn];
-        
-         memset(prime, true, sizeof(prime));
- 
-    for (int p = 2; p * p <= n; p++)
-    {
-        if (prime[p] == true)
-        {
-            for (int i = p * p; i <= n; i += p)
-                prime[i] = false;
+    vector<bool> sieveOfEratosthenes(int n) {
+    vector<bool> isPrime(n + 1, true);
+    isPrime[0] = isPrime[1] = false;
+
+    int sqrtN = sqrt(n);
+    for (int i = 2; i <= sqrtN; ++i) {
+        if (isPrime[i]) {
+            for (int j = i * i; j <= n; j += i) {
+                isPrime[j] = false;
+            }
         }
     }
-        
-        vector<vector<int>> result;
-        
-        vector<int> v;
-        for (int p = 2; p <= n; p++)
-        if (prime[p])
-            v.push_back(p);
-        
-        int i = 0, j = v.size()-1;
-        while(i<=j){
-            if(v[i]+v[j] == n){
-                result.push_back({v[i], v[j]});
-                i++; j--;
-            }else if(v[i] + v[j]>n) j--;
-            else i++;
+
+    return isPrime;
+}
+    
+    vector<vector<int>> findPrimePairs(int n) {
+        vector<bool> isPrime = sieveOfEratosthenes(n);
+        vector<vector<int>> ans;
+
+        for (int x = 2; x <= n - 2; ++x) {
+            if (isPrime[x]) {
+                int y = n - x;
+                if (isPrime[y] && x <= y) {
+                    ans.push_back({x, y});
+                }
+            }
         }
-        return result;
+
+        return ans;
     }
 };
