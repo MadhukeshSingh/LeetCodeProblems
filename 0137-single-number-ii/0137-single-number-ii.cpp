@@ -1,18 +1,14 @@
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-         unordered_map<int, int> m;
-        
-        for(auto x: nums){
-            m[x]++;
+        int ones = 0;
+        int twos = 0;
+
+        for (const int num : nums) {
+          ones ^= (num & ~twos);
+          twos ^= (num & ~ones);
         }
 
-        for(auto x: m){
-            if(x.second == 1){
-                return x.first;
-            }
-        }
-        
-        return -1;
+        return ones;
     }
 };
