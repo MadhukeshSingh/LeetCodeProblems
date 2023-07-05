@@ -19,6 +19,9 @@ public:
             }
             ans = max(ans, right - left + 1 - zeros);
         }
-        return (ans == n) ? ans - 1 : ans;
+        if (ans == n)  
+            return ans - 1;
+        
+        return ans;
     }
 };
