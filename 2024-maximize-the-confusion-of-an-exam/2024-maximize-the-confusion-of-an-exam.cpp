@@ -6,14 +6,14 @@ public:
         int i = 0;
         int j = 0;
         int ans = 0;
-        
-        while (j < answerKey.length()) {
+        int n = answerKey.size();
+        while (j < n) {
             if (answerKey[j] == 'F')
                 countF++;
             else
                 countT++;
             
-            while (std::min(countF, countT) > k) {
+            while (min(countF, countT) > k) {
                 if (answerKey[i] == 'F')
                     countF--;
                 else
@@ -22,7 +22,7 @@ public:
                 i++;
             }
             
-            ans = std::max(ans, countF + countT);
+            ans = max(ans, countF + countT);
             j++;
         }
         
