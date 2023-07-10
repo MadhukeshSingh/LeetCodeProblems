@@ -15,13 +15,9 @@ public:
         if(root == NULL){
             return 0;
         }
-        
-        int left = minDepth(root->left);
-        int right = minDepth(root->right);
-
-        if(root->left && root->right){
-            return min(left+1, right+1);
+        if (root -> left && root -> right){
+            return 1 + min(minDepth(root -> left),minDepth(root -> right));
         }
-        return max(left+1, right+1);
+        return 1 + max(minDepth(root->left), minDepth(root->right));
     }
 };
