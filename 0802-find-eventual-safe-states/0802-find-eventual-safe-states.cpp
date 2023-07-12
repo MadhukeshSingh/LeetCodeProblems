@@ -1,46 +1,35 @@
 class Solution {
 public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
-        int n = graph.size();
-        vector<int> indegree(n);
-        vector<vector<int>> adj(n);
-
-        for (int i = 0; i < n; i++) {
-            for (auto node : graph[i]) {
-                adj[node].push_back(i);
-                indegree[i]++;
+         int n=graph.size();
+        vector<int> vis(n,0);
+        vector<int> dis(n,0);
+        vector<int> adj[n];
+        for(int i=0;i<n;i++){
+            for(auto &x:graph[i]){
+                adj[x].push_back(i);
+                dis[i]++;
             }
         }
-
         queue<int> q;
-        // Push all the nodes with indegree zero in the queue.
-        for (int i = 0; i < n; i++) {
-            if (indegree[i] == 0) {
+        for(int i=0;i<n;i++){
+            if(dis[i]==0){
                 q.push(i);
             }
         }
-
-        vector<bool> safe(n);
-        while (!q.empty()) {
-            int node = q.front();
+        vector<int> ans;
+        while(!q.empty()){
+            int node=q.front();
+            ans.push_back(node);
             q.pop();
-            safe[node] = true;
-
-            for (auto& neighbor : adj[node]) {
-                // Delete the edge "node -> neighbor".
-                indegree[neighbor]--;
-                if (indegree[neighbor] == 0) {
-                    q.push(neighbor);
+            for(auto x:adj[node]){
+                dis[x]--;
+                if(dis[x]==0){
+                    q.push(x);
                 }
             }
         }
-
-        vector<int> safeNodes;
-        for(int i = 0; i < n; i++) {
-            if(safe[i]) {
-                safeNodes.push_back(i);
-            }
-        }
-        return safeNodes;
+        sort(ans.begin(),ans.end());
+        return ans;
     }
 };
