@@ -1,21 +1,17 @@
 class Solution {
 public:
     int longestSubsequence(vector<int>& arr, int difference) {
-        int n = arr.size();
-        unordered_map<int, int> dp; 
-        
-        int ans = 1; 
-        for (int i = 0; i < n; i++) {
-            int num = arr[i];
-            if (dp.find(num - difference) != dp.end()) {
-                dp[num] = dp[num - difference] + 1;
-            } else {
-                dp[num] = 1;
-            }
-            
-            ans = max(ans, dp[num]);
+       int k=2*100000+2;
+       vector<int>m(k);
+       int mx=0;
+        for(int i=0;i<arr.size();i++){
+            int c=arr[i];
+            if(m[c-difference+100000]!=0)
+            m[c+100000]=m[c-difference+100000]+1;
+            else
+            m[c+100000]=1;
+            mx=max(mx,m[c+100000]);
         }
-        
-        return ans;
+        return mx;
     }
 };
