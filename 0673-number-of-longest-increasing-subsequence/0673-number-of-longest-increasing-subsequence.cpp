@@ -1,43 +1,38 @@
 class Solution {
 public:
     int findNumberOfLIS(std::vector<int>& nums) {
-        int n = nums.size();
-        vector<int> length(n, 0);
-        vector<int> count(n, 0);
-
-        function<void(int)> calculateDP = [&](int i) {
-            if (length[i] != 0)
-                return;
-
-            length[i] = 1;
-            count[i] = 1;
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
-                    calculateDP(j);
-                    if (length[j] + 1 > length[i]) {
-                        length[i] = length[j] + 1;
-                        count[i] = 0;
+      int n=nums.size();
+          vector<pair<int,int>>lisfq(n);
+        lisfq[0].first=1;
+        lisfq[0].second=1;
+        int lo=1;
+        for(int i=1;i<nums.size();i++){
+            int mx=0;
+            int c=1;
+            for(int j=0;j<i;j++){
+                if(nums[j]<nums[i]){
+                    if(lisfq[j].first>mx){
+                        mx=lisfq[j].first;
+                        c=lisfq[j].second;
                     }
-                    if (length[j] + 1 == length[i]) {
-                        count[i] += count[j];
+                    else if(lisfq[j].first==mx){
+                      c=c+lisfq[j].second;
                     }
                 }
             }
-        };
-
-	int maxLength = 0;
-        int result = 0;
-        for (int i = 0; i < n; i++) {
-            calculateDP(i);
-            if (length[i] > maxLength)
-                maxLength = length[i];
+           lisfq[i].second=c;
+            lisfq[i].first=mx+1;
+            if(lo<lisfq[i].first){
+               lo=lisfq[i].first; 
+            }
         }
-
-        for (int i = 0; i < n; i++) {
-            if (length[i] == maxLength)
-                result += count[i];
+        int count=0;
+     
+        for(int i=0;i<nums.size();i++){
+            if(lisfq[i].first==lo){
+                count+=lisfq[i].second;
+            }
         }
-
-        return result;
+        return count;
     }
 };
