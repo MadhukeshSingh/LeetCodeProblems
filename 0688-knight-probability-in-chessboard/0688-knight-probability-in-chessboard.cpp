@@ -1,36 +1,31 @@
 class Solution {
 public:
-    double knightProbability(int n, int k, int row, int column) {
-         double dp[n][n];
-    memset(dp, 0, sizeof(dp));
-    dp[row][column] = 1;
-
-    int moves[8][2] = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
-
-    for (int move = 1; move <= k; move++) {
-        double newDp[n][n];
-        memset(newDp, 0, sizeof(newDp));
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-                for (int i = 0; i < 8; i++) {
-                    int newR = r + moves[i][0];
-                    int newC = c + moves[i][1];
-                    if (newR >= 0 && newR < n && newC >= 0 && newC < n) {
-                        newDp[r][c] += dp[newR][newC] / 8.0;
-                    }
+         double dp[26][26][102];
+    int xmove[8] = {-2,-2,-1,-1,1,1,2,2};
+    int ymove[8] = {-1,1,-2,2,-2,2,-1,1};
+  double solve(int row,int col,int n,int k){
+        if(row < 0 || col < 0 || row >= n || col >= n) return 0;
+        if(k == 0) return 1;
+        if(dp[row][col][k] != -1.0) return dp[row][col][k];
+        
+       double ans = 0;
+        
+        for(int i=0;i<8;i++){
+            ans += solve(row+xmove[i], col+ymove[i], n, k-1);
+        }
+        
+        return dp[row][col][k] = ans;
+    }
+    double knightProbability(int n, int k, int row, int col) {
+        for(int i=0;i<26;i++){
+            for(int j=0;j<26;j++){
+                for(int k=0;k<102;k++){
+                    dp[i][j][k]=-1;
                 }
             }
         }
-        memcpy(dp, newDp, sizeof(dp));
-    }
-
-    double probability = 0;
-    for (int r = 0; r < n; r++) {
-        for (int c = 0; c < n; c++) {
-            probability += dp[r][c];
-        }
-    }
-
-    return probability;
+        double favourableoutcome = solve(row,col,n,k);
+        double totaloutcome = pow(8,k);
+        return favourableoutcome/totaloutcome;
     }
 };
