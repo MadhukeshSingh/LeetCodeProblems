@@ -1,26 +1,27 @@
 class Solution {
 public:
     string frequencySort(string s) {
-        int n = s.size();
-        vector<int> freq(128, 0); // Assuming ASCII characters
-        
-        // Count the frequency of each character
-        for (char c : s) {
-            freq[c]++;
+        unordered_map<char, int> characterCount;
+
+        for(auto ch : s) {
+           characterCount[ch]++;
         }
-        
-        // Create a custom sorting comparator based on character frequency
-        auto comparator = [&](char a, char b) {
-            if (freq[a] != freq[b]) {
-                return freq[a] > freq[b]; // Sort in decreasing order of frequency
-            } else {
-                return a < b; // If frequencies are equal, sort lexicographically
+
+        priority_queue<pair<int, char>> pq;
+
+        for(auto [ch, frequency] : characterCount) {
+
+           pq.push({frequency, ch});
+
+        } 
+        string res;
+        pair<int, char> curr;
+        while(!pq.empty()) {
+            curr = pq.top();
+            pq.pop();
+            res += string(curr.first, curr.second);
             }
-        };
-        
-        // Sort the characters based on frequency
-        sort(s.begin(), s.end(), comparator);
-        
-        return s;
+
+        return res;
     }
 };
